@@ -127,8 +127,8 @@ function initialize() {
                 const receivedEvent = parseEventMessage(receivedMessage);
                 if(receivedEvent.event == "move") {
                     const data = receivedEvent.data;
-                    const isValidMovementDescription = isValidMovementDescription(data);
-                    if(data == movementDescriptions.FORWARD) {
+                    const isValidMovement = isValidMovementDescription(data);
+                    if(isValidMovement) {
                         console.log("UPDATE MOVEMENT: "+data);
                         updateMovement(data);
                     } else {
