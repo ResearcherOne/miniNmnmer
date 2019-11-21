@@ -27,6 +27,11 @@ const additionalPins = {
     MQTT_CONNECTION_STATUS_PIN: 12
 };
 
+const teleprecenseEvents = {
+    STATUS: "status",
+    MOVEMENT: "movement"
+}
+
 function isJsonString(str) {
     try {
         JSON.parse(str);
@@ -62,20 +67,35 @@ function updateMovement(movementDescription) {
         stop();
         rpio.write(motorControllerPins.LEFT_SIDE_A, rpio.HIGH);
         rpio.write(motorControllerPins.RIGHT_SIDE_A, rpio.HIGH);
+
+        const message = createEventMessage(teleprecenseEvents.MOVEMENT, "forward");
+        client.publish(TELEPRECENSE_PUBLISH_EVENTS_TOPIC, message);
     } else if(movementDescription == movementDescriptions.BACKWARD) {
         stop();
         rpio.write(motorControllerPins.LEFT_SIDE_B, rpio.HIGH);
         rpio.write(motorControllerPins.RIGHT_SIDE_B, rpio.HIGH);
+
+        const message = createEventMessage(teleprecenseEvents.MOVEMENT, "backward");
+        client.publish(TELEPRECENSE_PUBLISH_EVENTS_TOPIC, message);
     } else if(movementDescription == movementDescriptions.RIGHT) {
         stop();
         rpio.write(motorControllerPins.LEFT_SIDE_A, rpio.HIGH);
         rpio.write(motorControllerPins.RIGHT_SIDE_B, rpio.HIGH);
+
+        const message = createEventMessage(teleprecenseEvents.MOVEMENT, "right");
+        client.publish(TELEPRECENSE_PUBLISH_EVENTS_TOPIC, message);
     } else if(movementDescription == movementDescriptions.LEFT) {
         stop();
         rpio.write(motorControllerPins.LEFT_SIDE_B, rpio.HIGH);
         rpio.write(motorControllerPins.RIGHT_SIDE_A, rpio.HIGH);
+
+        const message = createEventMessage(teleprecenseEvents.MOVEMENT, "left");
+        client.publish(TELEPRECENSE_PUBLISH_EVENTS_TOPIC, message);
     } else if(movementDescription == movementDescriptions.STOP) {
         stop();
+
+        const message = createEventMessage(teleprecenseEvents.MOVEMENT, "stop");
+        client.publish(TELEPRECENSE_PUBLISH_EVENTS_TOPIC, message);
     } else {
         console.log("Unexpected movement description: "+movementDescription);
     }
@@ -110,7 +130,7 @@ function initialize() {
         console.log("CONNECT")
         client.subscribe(TELEPRECENSE_RECEIVE_COMMANDS_TOPIC, function (err) {
             if (!err) {
-                const message = createEventMessage("status", "online");
+                const message = createEventMessage(teleprecenseEvents.STATUS, "online");
                 client.publish(TELEPRECENSE_PUBLISH_EVENTS_TOPIC, message);
             }
         })
