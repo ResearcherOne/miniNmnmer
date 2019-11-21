@@ -129,6 +129,7 @@ function initialize() {
                     const data = receivedEvent.data;
                     const isValidMovementDescription = isValidMovementDescription(data);
                     if(data == movementDescriptions.FORWARD) {
+                        console.log("UPDATE MOVEMENT: "+data);
                         updateMovement(data);
                     } else {
                         console.log("Unexpected move command received: "+data);
