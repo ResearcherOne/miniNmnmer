@@ -25,7 +25,7 @@ const motorControllerPins = {
 
 const additionalPins = {
     MQTT_CONNECTION_STATUS_PIN: 12
-;}
+};
 
 function isJsonString(str) {
     try {
