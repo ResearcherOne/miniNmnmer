@@ -1,11 +1,11 @@
 const config = require("./config.js")
 
 var mqtt = require('mqtt')
-console.log(config.HOST)
-var client  = mqtt.connect({host: config.HOST, port: config.PORT, username: config.USERNAME, password: config.PASSWORD})
+
+var client  = mqtt.connect({host: config.MQTT_HOST, port: config.MQTT_PORT, username: config.MQTT_USERNAME, password: config.MQTT_PASSWORD})
 const keyboardModule = require('./KeyboardModule.js')
- 
-const RECEIVE_EVENTS = config.RECEIVE_EVENTS;
+
+const RECEIVE_EVENTS = config.RECEIVE_EVENTS_TOPIC;
 const SEND_COMMANDS_TOPIC = config.SEND_COMMANDS_TOPIC;
 const CONTROLLER_EVENTS_TOPIC = config.CONTROLLER_EVENTS_TOPIC;
 
