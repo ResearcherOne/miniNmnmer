@@ -3,10 +3,15 @@
 const ioHook = require('iohook');
 
 const keyCodes = {
-  UP: 57416,
+  /*UP: 57416,
   DOWN: 57424,
   RIGHT: 57421,
-  LEFT: 57419,
+  LEFT: 57419,*/
+  
+  UP: 61000,
+  DOWN: 61008,
+  RIGHT: 61005,
+  LEFT: 61003,
 
   SPACE: 57
 }
@@ -74,6 +79,7 @@ ioHook.on('keyup', event => {
     if(!keyupEventHandler) return;
 
     const eventKeycode = event.keycode;
+	console.log(eventKeycode);
     if(isRecognizedKeycode(eventKeycode)) {
         const previousKeyState = previousKeyStates[eventKeycode];
         if(previousKeyState == "keyup") {
