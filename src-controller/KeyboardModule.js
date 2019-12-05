@@ -2,18 +2,32 @@
 
 const ioHook = require('iohook');
 
-const keyCodes = {
-  /*UP: 57416,
-  DOWN: 57424,
-  RIGHT: 57421,
-  LEFT: 57419,*/
-  
-  UP: 61000,
-  DOWN: 61008,
-  RIGHT: 61005,
-  LEFT: 61003,
 
-  SPACE: 57
+const keyCodes = {
+    UP: "UP",
+    DOWN: "DOWN",
+    RIGHT: "RIGHT",
+    LEFT: "LEFT",
+
+    SPACE: "SPACE"
+}
+
+const linuxKeycodes = {
+    UP: 57416,
+    DOWN: 57424,
+    RIGHT: 57421,
+    LEFT: 57419,
+
+    SPACE: 57
+}
+
+const windowsKeycodes = {
+    UP: 61000,
+    DOWN: 61008,
+    RIGHT: 61005,
+    LEFT: 61003,
+
+    SPACE: 57
 }
 
 var previousKeyStates = {};
@@ -21,16 +35,26 @@ var previousKeyStates = {};
 var keydownEventHandler;
 var keyupEventHandler;
 
+function isEqualKeycode(keyCode, keyCodeDescription) {
+    if(keyCode == linuxKeycodes[keyCodeDescription]) {
+        return true;
+    } else if (keyCode == windowsKeycodes[keyCodeDescription]) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function getKeyDescription(keyCode) {
-    if(keyCode == keyCodes.UP) {
+    if(isEqualKeycode(keyCode, keyCodes.UP)) {
         return "UP";
-    } else if(keyCode == keyCodes.DOWN) {
+    } else if(isEqualKeycode(keyCode, keyCodes.DOWN)) {
         return "DOWN";
-    } else if(keyCode == keyCodes.RIGHT) {
+    } else if(isEqualKeycode(keyCode, keyCodes.RIGHT)) {
         return "RIGHT";
-    } else if(keyCode == keyCodes.LEFT) {
+    } else if(isEqualKeycode(keyCode, keyCodes.LEFT)) {
         return "LEFT";
-    } else if(keyCode == keyCodes.SPACE) {
+    } else if(isEqualKeycode(keyCode, keyCodes.SPACE)) {
         return "SPACE";
     } else {
         return "UNKNOWN";
@@ -38,15 +62,15 @@ function getKeyDescription(keyCode) {
 }
 
 function isRecognizedKeycode(keyCode) {
-    if(keyCode == keyCodes.UP) {
+    if(isEqualKeycode(keyCode, keyCodes.UP)) {
         return true;
-    } else if(keyCode == keyCodes.DOWN) {
+    } else if(isEqualKeycode(keyCode, keyCodes.DOWN)) {
         return true;
-    } else if(keyCode == keyCodes.RIGHT) {
+    } else if(isEqualKeycode(keyCode, keyCodes.RIGHT)) {
         return true;
-    } else if(keyCode == keyCodes.LEFT) {
+    } else if(isEqualKeycode(keyCode, keyCodes.LEFT)) {
         return true;
-    } else if(keyCode == keyCodes.SPACE) {
+    } else if(isEqualKeycode(keyCode, keyCodes.SPACE)) {
         return true;
     } else {
         return false;
@@ -79,7 +103,6 @@ ioHook.on('keyup', event => {
     if(!keyupEventHandler) return;
 
     const eventKeycode = event.keycode;
-	console.log(eventKeycode);
     if(isRecognizedKeycode(eventKeycode)) {
         const previousKeyState = previousKeyStates[eventKeycode];
         if(previousKeyState == "keyup") {
