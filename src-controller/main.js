@@ -17,9 +17,14 @@ const movementDescriptions = {
     STOP: "stop"
 }
 
+const powerEventData = {
+    SHUTDOWN: "shutdown"
+}
+
 const controllerEvents = {
     MOVE: "move",
-    STATUS: "status"
+    STATUS: "status",
+    POWER: "power"
 }
 
 function isJsonString(str) {
@@ -116,7 +121,8 @@ function initialize() {
             const message = createEventMessage(controllerEvents.MOVE, movementDescriptions.STOP);
             client.publish(SEND_COMMANDS_TOPIC, message);
         } else if (keyDescription == "SPACE") {
-
+            const message = createEventMessage(controllerEvents.POWER, powerEventData.SHUTDOWN);
+            client.publish(SEND_COMMANDS_TOPIC, message);
         } else {
             console.log("Unknown key description: "+keyDescription);
         }

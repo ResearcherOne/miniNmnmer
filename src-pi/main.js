@@ -4,6 +4,8 @@ var mqtt = require('mqtt')
 var client  = mqtt.connect({host: config.HOST, port: config.PORT, username: config.USERNAME, password: config.PASSWORD})
 
 var rpio = require('rpio');
+
+var exec = require('child_process').exec;
  
 const TELEPRECENSE_RECEIVE_COMMANDS_TOPIC = config.TELEPRECENSE_RECEIVE_COMMANDS_TOPIC;
 const TELEPRECENSE_PUBLISH_EVENTS_TOPIC = config.TELEPRECENSE_PUBLISH_EVENTS_TOPIC;
@@ -29,7 +31,12 @@ const additionalPins = {
 
 const teleprecenseEvents = {
     STATUS: "status",
-    MOVEMENT: "movement"
+    MOVEMENT: "movement",
+    POWER: "power"
+}
+
+function shutdown(callback){
+    exec('shutdown now', function(error, stdout, stderr){ callback(stdout); });
 }
 
 function isJsonString(str) {
@@ -153,6 +160,15 @@ function initialize() {
                         updateMovement(data);
                     } else {
                         console.log("Unexpected move command received: "+data);
+                    }
+                } else if(receivedEvent.event == "power") {
+                    const data = receivedEvent.data;
+                    if(data == "shutdown") {
+                        shutdown(function(stdout){
+                            console.log("Shutting down the system: "+stdout);
+                        })
+                    } else {
+                        console.log("Unexpected power command received: "+data);
                     }
                 }
             }
