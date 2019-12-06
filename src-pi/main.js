@@ -135,6 +135,7 @@ function initialize() {
     // MQTT Init
     client.on('connect', function () {
         console.log("CONNECT")
+        rpio.write(motorControllerPins.MQTT_CONNECTION_STATUS_PIN, rpio.HIGH);
         client.subscribe(TELEPRECENSE_RECEIVE_COMMANDS_TOPIC, function (err) {
             if (!err) {
                 const message = createEventMessage(teleprecenseEvents.STATUS, "online");
@@ -180,10 +181,13 @@ function initialize() {
 
     client.on('reconnect', function(){
         console.log("RECONNECT")
+        rpio.open(additionalPins.MQTT_CONNECTION_STATUS_PIN, rpio.OUTPUT, rpio.LOW);
+        
     })
 
     client.on('offline', function(){
         console.log("OFFLINE")
+        rpio.open(additionalPins.MQTT_CONNECTION_STATUS_PIN, rpio.OUTPUT, rpio.LOW);
     })
 }
 
